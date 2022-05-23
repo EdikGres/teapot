@@ -63,6 +63,7 @@ void loop(void) {
     if (millis() - tmr > 500) {
       tmr = millis();
       regulator.input = getTemp()+3; // сообщаем регулятору текущую температуру
+      if(set_temp == 99) regulator.input = getTemp();
       digitalWrite(RELAY, regulator.getResult());   // отправляем на реле (ОС работает по своему таймеру)
     }
   //digitalWrite(RELAY, regulator.getResult());
