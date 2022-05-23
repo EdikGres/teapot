@@ -8,7 +8,7 @@
 // temp. для номинального сопротивления (практически всегда равна 25 C)
 #define TEMPERATURENOMINAL 24
 // сколько показаний используем для определения среднего значения
-#define NUMSAMPLES 5
+#define NUMSAMPLES 8
 // бета коэффициент термистора (обычно 3000-4000)
 #define BCOEFFICIENT 3750
 // сопротивление второго резистора
@@ -62,15 +62,15 @@ void loop(void) {
   static uint32_t tmr;
     if (millis() - tmr > 500) {
       tmr = millis();
-      regulator.input = getTemp(); // сообщаем регулятору текущую температуру
+      regulator.input = getTemp()+3; // сообщаем регулятору текущую температуру
       digitalWrite(RELAY, regulator.getResult());   // отправляем на реле (ОС работает по своему таймеру)
     }
   //digitalWrite(RELAY, regulator.getResult());
   ruchka_resist = analogRead(RUCHKA);
   set_temp = map(ruchka_resist, 0,1024,0,100);
   regulator.setpoint = set_temp;
-  Serial.print("Ruchka: ");
-  Serial.println(set_temp);
+  //Serial.print("Ruchka: ");
+  //Serial.println(set_temp);
   
   lcd.setCursor(0,0);
   lcd.print("Cur_Temp:");
@@ -80,7 +80,7 @@ void loop(void) {
   lcd.print(set_temp);
   delay(250);
   //lcd.clear();
-  if(counter > 12){
+  if(counter > 4){
     lcd.clear();
     lcd.begin(16, 2);
     lcd.setCursor(0, 0);
@@ -94,7 +94,7 @@ float getTemp() {
   // сводим показания в вектор с небольшой задержкой между снятием показаний
   for (i=0; i< NUMSAMPLES; i++) {
     samples[i] = analogRead(THERMISTORPIN);
-    delay(10);
+    delay(5);
   }
   // рассчитываем среднее значение
   average = 0;
