@@ -70,8 +70,8 @@ void loop(void) {
   ruchka_resist = analogRead(RUCHKA);
   set_temp = map(ruchka_resist, 0,1024,0,100);
   regulator.setpoint = set_temp;
-  //Serial.print("Ruchka: ");
-  //Serial.println(set_temp);
+  Serial.print("Ruchka: ");
+  Serial.println(set_temp);
   
   lcd.setCursor(0,0);
   lcd.print("Cur_Temp:");
